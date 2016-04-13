@@ -149,7 +149,7 @@
 	{
 		if (finish == o.value)
 			{
-				document.getElementById("win").innerHTML = "<h1>YOU WIN!</h1><a href='index.html'>restart</a>";
+				document.getElementById("win").innerHTML = "<h1>YOU WIN!</h1><a href='index.html'><center>restart</center></a>";
 				document.onkeydown = null;
 				return true;
 			}
@@ -161,7 +161,7 @@
 			lockedOrNotExists(o.y - 1, o.x) &&
 			lockedOrNotExists(o.y, o.x + 1) &&
 			lockedOrNotExists(o.y, o.x - 1) )
-			{ document.getElementById("win").innerHTML = "<h1>YOU LOSE!</h1><a href='index.html'>restart</a>";
+			{ document.getElementById("win").innerHTML = "<h1>YOU LOSE!</h1><a href='index.html'><center>restart</center></a>";
 				document.onkeydown = null;
 				return true;
 			}
@@ -205,6 +205,8 @@
 		return c;
 	}
 	</script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "f9528fa3-d73c-4c7c-81d6-6a99ad7663c6", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
 </head>
 <body>
 <h1 class="title">+7</h1>
@@ -215,6 +217,11 @@
 <h2>Steps : <span id="steps"></span></h2>
 <div id="canvas" align="center"></div>
 <div id="win"></div>
+<div align="center">
+	<span class='st_facebook_vcount' displayText='Facebook'></span>
+	<span class='st_twitter_vcount' displayText='Tweet'></span>
+	<span class='st_vkontakte_vcount' displayText='Vkontakte'></span>
+</div>
 <script>
 lock(o.value);
 document.getElementById("canvas").innerHTML = updateHTML();
