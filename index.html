@@ -1,0 +1,224 @@
+<html>
+
+<head>
+<title>+7</title>
+	<style type="text/css">
+	body {
+		font-family: arial;
+		margin: 0px auto;
+		width: 302px;
+	}
+	a {
+		text-decoration: none;
+		color: black;
+	}
+	.title
+	{
+		font-weight: bold;
+		background-color: #FF9900;
+		color: white;
+	}
+	.block {
+		width: 40px;
+		height: 40px;
+		border: none;
+		background-color: gray;
+		text-align: center;
+		line-height: 40px;
+		color: white;
+		font-family: arial;
+		font-weight: bold;
+	}
+	.block.selected
+	{
+		background-color: #FF9900;
+	}
+	.block.locked
+	{
+		background-color: lightgray;
+	}
+	</style>
+	
+	<script>
+	
+	document.onkeydown = checkKey;
+	var size = 7;
+	var items = new Array(size);
+	for (var i = 0; i < size; i++) {
+		items[i] = new Array(size);
+	}
+	
+	var o = {'x': 4, 'y': 4, 'value' : size};
+	var ops = ["+", "-", "*", "/"];
+	var finish = Math.floor(Math.random() * 1000);
+	var steps = 0;
+	//var cursor = size;
+	for (var i = 0; i < size; i++)
+		for (var j = 0; j < size; j++)
+			{
+				var signIndex = Math.floor(Math.random() * ops.length);
+				var item = { 
+					'sign': ops[signIndex], 
+					'number' : Math.floor(Math.random() * (size)),
+					'locked' : false
+				};
+				//item.sign = signIndex;
+				items[i][j] = item;
+			}
+	
+	function lock(value)
+	{
+		for (var i = 0; i < size; i++)
+			for (var j = 0; j < size; j++)
+			{
+				var item = items[j][i];
+				var n = o.value;
+				var result = step(n, item);
+				if 	( !Number.isInteger(result) ||
+					  result < 0) 
+				{	
+					items[j][i].locked = true;
+					console.log("Locked");
+				}
+				else 
+					items[j][i].locked = false;
+			}
+	}
+	
+	function step(value, item)
+	{
+		switch (item.sign)
+		{
+			case "+": value += item.number; break;
+			case "-": value -= item.number; break;
+			case "*": value *= item.number; break;
+			case "/": value /= item.number; break;
+
+		}
+		return value;
+	}
+	function isOutOfBounds(pos)
+	{
+		if (pos.x >= size || pos.y >= size ||
+			pos.x < 0 || pos.y < 0)
+			return true; else return false;
+	}
+	/*function isStepValid(n,item)
+	{
+		if 	( !Number.isInteger(result) ||
+					  result < 0) 
+	}*/
+	function checkKey(e) {
+
+		e = e || window.event;
+		var oNext = Object.assign({}, o);
+		if (e.keyCode == '38') {
+			// up arrow
+			oNext.x--;
+		}
+		else if (e.keyCode == '40') {
+			// down arrow
+			oNext.x++;
+		}
+		else if (e.keyCode == '37') {
+			// left arrow
+			oNext.y--;
+		}
+		else if (e.keyCode == '39') {
+			// right arrow
+			oNext.y++;
+		}
+		
+		if (items[oNext.y][oNext.x].locked == false && !isOutOfBounds(oNext))
+		{
+			var oOld = Object.assign({}, o);
+			o = oNext;
+			o.value = step(o.value, items[o.y][o.x]);
+			lock(o.value);
+			items[oOld.y][oOld.x].locked = true;
+			steps++;
+		}
+		//else console.log("STOP");
+		document.getElementById("canvas").innerHTML = updateHTML();
+		document.getElementById("steps").innerHTML = steps;
+		if (!checkFinish())
+		checkLose();
+		}
+	
+	function checkFinish()
+	{
+		if (finish == o.value)
+			{
+				document.getElementById("win").innerHTML = "<h1>YOU WIN!</h1><a href='index.html'>restart</a>";
+				document.onkeydown = null;
+				return true;
+			}
+			else return false;
+	}
+	function checkLose()
+	{
+		if (lockedOrNotExists(o.y + 1, o.x) &&
+			lockedOrNotExists(o.y - 1, o.x) &&
+			lockedOrNotExists(o.y, o.x + 1) &&
+			lockedOrNotExists(o.y, o.x - 1) )
+			{ document.getElementById("win").innerHTML = "<h1>YOU LOSE!</h1><a href='index.html'>restart</a>";
+				document.onkeydown = null;
+				return true;
+			}
+			else return false;
+	}
+	function lockedOrNotExists(y, x)
+	{
+		if (isOutOfBounds({y,x}))
+			return true;
+		else
+			if (items[y][x].locked)
+				return true;
+		return false;
+	}
+	function updateHTML()
+	{
+		var c = "<table>";
+		for (var i = 0; i < size; i++)
+		{
+			c+="<tr>";
+			for (var j = 0; j < size; j++)
+			{
+				c+="<td>";
+				if (o.x == i && o.y == j)
+				{	
+					c+="<div class='block selected'>";
+					c+=o.value;
+				}
+				else
+				{
+					var locked = items[j][i].locked ? "locked" : "";
+					c+="<div class='block " + locked+"'>";
+					c+=items[j][i].sign + items[j][i].number;
+				}
+				c+="</div>";
+				c+="</td>";
+			}
+			c+="</tr>";
+		}
+		c+="</table>";
+		return c;
+	}
+	</script>
+</head>
+<body>
+<h1 class="title">+7</h1>
+<div align="center">
+	<h1>Make block <span class="block selected" id="finish"></span></h1>
+	Use arrow keys to move it.
+</div>
+<h2>Steps : <span id="steps"></span></h2>
+<div id="canvas" align="center"></div>
+<div id="win"></div>
+<script>
+lock(o.value);
+document.getElementById("canvas").innerHTML = updateHTML();
+document.getElementById("finish").innerHTML = finish;
+</script>
+</body>
+</html>
