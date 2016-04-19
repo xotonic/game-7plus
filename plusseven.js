@@ -23,7 +23,13 @@ for (var i = 0; i < size; i++) {
 // block generates op randomly
 var ops = ["+", "-", "*", "/"];
 // chances of appering op in block
-var op_chances = [0.3, 0.3, 0.2, 0.2];
+var op_chances = [0.4, 0.4, 0.15, 0.05];
+var op_styles = {
+    "+" : "op_add",
+    "-" : "op_sub", 
+    "*" : "op_mul",
+    "/" : "op_div"
+};
 // value, which you must reach for win
 var finish = Math.floor(Math.random() * 1000);
 var lose_max = 9999;
@@ -34,20 +40,18 @@ var steps = 0;
 // filling field randomly
 for (var i = 0; i < size; i++)
     for (var j = 0; j < size; j++) {
-        var signIndex = Math.floor(Math.random() * ops.length);
-        var item = {
-            'sign': ops[signIndex],
-            'number': Math.floor(Math.random() * (size)),
-            'locked': false,
-            'lives': 3
-        };
-        items[i][j] = item;
+        reborn_block(i, j);
     }
 
 function reborn_block(i, j) {
-    var sign_index = Math.floor(Math.random() * ops.length);
+    
+    var lucky;
+    for (lucky = 0; lucky < ops.length - 1; lucky++)
+    if (Math.random() <= op_chances[lucky]) break;
+    console.log(lucky);
+    var sign_index = lucky;//Math.floor(Math.random() * ops.length);
     var item = {
-        'sign': ops[signIndex],
+        'sign': ops[sign_index],
         'number': Math.floor(Math.random() * (size)),
         'locked': false,
         'lives': 3
@@ -134,8 +138,10 @@ function checkKey(e) {
         o = oNext;
         o.value = step(o.value, items[o.y][o.x]);
         lock(o.value);
-        items[oOld.y][oOld.x].locked = true;
-        items[oOld.y][oOld.x].lives--;
+        var item = items[oOld.y][oOld.x];
+        item.locked = true;
+        item.lives--;
+        if (item.lives == 0) reborn_block(oOld.y, oOld.x);
         steps++;
     }
     //else console.log("STOP");
@@ -189,9 +195,12 @@ function updateHTML() {
             } else {
                 var locked = items[j][i].locked ? "locked" : "";
                 var lives = "lives"+ items[j][i].lives;
-               // var opstyle;
+                var opstyle = op_styles[items[j][i].sign];
                 //switch ()
-                c += "<div class='block " + locked +" "+ lives + "'>";
+                c += "<div class='block " 
+                + locked + " " 
+                + lives + " "
+                + opstyle + "'>";
                 c += items[j][i].sign + items[j][i].number;
             }
             c += "</div>";

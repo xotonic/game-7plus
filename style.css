@@ -24,6 +24,11 @@ body {
 	.block.selected
 	{
 		background-color: #FF9900;
+		-moz-transform: scale(1.1); /* Для Firefox */
+    -ms-transform: scale(1.1); /* Для IE */
+    -webkit-transform: scale(1.1); /* Для Safari, Chrome, iOS */
+    -o-transform: scale(1.1); /* Для Opera */
+    transform: scale(1.1);
 	}
 	.block.locked
 	{
@@ -57,19 +62,19 @@ body {
 	
 	.block.op_add
 	{
-		background-color: green;
+		background-color: #67A65E;
 	}
 	.block.op_sub
 	{
-		background-color: red;
+		background-color: #A65E5E;
 	}
 	.block.op_mul
 	{
-		background-color: blue;
+		background-color: #5E99A6;
 	}
 	.block.op_div
 	{
-		background-color: purple;
+		background-color: #A65EA6;
 	}
 	.blur
 	{
