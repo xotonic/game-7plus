@@ -52,7 +52,7 @@ function reborn_block(i, j) {
     var sign_index = lucky;//Math.floor(Math.random() * ops.length);
     var item = {
         'sign': ops[sign_index],
-        'number': Math.floor(Math.random() * (size)),
+        'number': 1 + Math.floor(Math.random() * (size-1)),
         'locked': false,
         'lives': 3
     };
