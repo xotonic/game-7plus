@@ -132,7 +132,7 @@ function checkKey(e) {
         // right arrow
         oNext.y++;
     }
-
+    else return;
     if (items[oNext.y][oNext.x].locked == false && !isOutOfBounds(oNext)) {
         var oOld = Object.assign({}, o);
         o = oNext;
@@ -213,6 +213,5 @@ function updateHTML() {
 }
 
 function gen_seedlink() {
-    document.getElementById("seeddiv").innerHTML = location.protocol +
-        "//" + location.host + location.pathname + "/?" + seed;
+    document.getElementById("seeddiv").innerHTML =  "xotonic.github.io/?" + seed;
 }
