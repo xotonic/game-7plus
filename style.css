@@ -81,4 +81,27 @@ body {
 		-webkit-filter: blur(5px);
 		filter: blur(5px);
 	}
-
+	#cooldown
+	{
+		width: 40px;
+		height: 40px;
+		background-color: #232323;
+		border-color: black;
+		text-align: center;
+		line-height: 40px;
+		color: white;
+		font-weight: bold;
+    	position:relative;
+    	-moz-transform: scale(1.2); /* Для Firefox */
+    -ms-transform: scale(1.2); /* Для IE */
+    -webkit-transform: scale(1.2); /* Для Safari, Chrome, iOS */
+    -o-transform: scale(1.2); /* Для Opera */
+    transform: scale(1.2);
+	}
+	.number
+	{
+		position:absolute;
+    	top:0;
+    	width:100%;
+    	line-height: 40px;
+	}
